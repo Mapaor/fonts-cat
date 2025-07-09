@@ -102,4 +102,4 @@ Feel free to contribute by:
 
 ## License
 
-This project uses data from OpenStreetMap, which is available under the Open Database License (ODbL). The code itself is unlicensed.
+This project uses data from OpenStreetMap, which is available under the Open Database License (ODbL). This repository and it's code is completely unlicensed ('The Unlicense' LICENSE), that means you are free to do anything you want with it with no restrictions of any kind.
