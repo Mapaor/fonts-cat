@@ -283,7 +283,7 @@ export default function MapBox({ accessToken }: MapBoxProps) {
             )}
             <div className="mt-3 text-xs text-gray-500">
               <p>💡 Fes clic als grups (cercles) per mostrar les fonts</p>
-              <p>🔍 O fes zoom al teu municipi</p>
+              <p>🔍 O simplement fes zoom al teu municipi</p>
               <p>⛲ <button 
                     onClick={() => setShowTutorialModal(true)}
                     className="text-blue-600 hover:text-blue-800 underline cursor-pointer"
@@ -316,7 +316,7 @@ export default function MapBox({ accessToken }: MapBoxProps) {
 
       {/* Tutorial Modal */}
       {showTutorialModal && (
-        <div className="fixed inset-0 bg-white bg-opacity-20 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-opacity-20 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-4xl max-h-[90vh] overflow-y-auto relative">
             {/* Close button */}
             <button
