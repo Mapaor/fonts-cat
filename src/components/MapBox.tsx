@@ -23,6 +23,7 @@ export default function MapBox({ accessToken }: MapBoxProps) {
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
   const [locationLoading, setLocationLoading] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
+  const [isMobileChrome, setIsMobileChrome] = useState(false);
 
   // Function to get user's current location
   const getUserLocation = () => {
@@ -426,6 +427,37 @@ export default function MapBox({ accessToken }: MapBoxProps) {
     }
   }, [userLocation]);
 
+  // Detect Chrome on Android and apply specific fixes
+  useEffect(() => {
+    const userAgent = navigator.userAgent;
+    const isAndroid = /Android/i.test(userAgent);
+    const isChrome = /Chrome/i.test(userAgent) && !/Edge/i.test(userAgent);
+    
+    if (isAndroid && isChrome) {
+      setIsMobileChrome(true);
+      
+      // Force reflow for Chrome Android rendering issues
+      const forceReflow = () => {
+        const geoButton = document.querySelector('[aria-label*="ubicació"]');
+        if (geoButton) {
+          const element = geoButton as HTMLElement;
+          element.style.display = 'none';
+          void element.offsetHeight; // Force reflow
+          element.style.display = 'flex';
+        }
+      };
+      
+      // Apply fix after DOM is ready
+      setTimeout(forceReflow, 1000);
+      
+      // Also apply on window resize (orientation change)
+      const handleResize = () => setTimeout(forceReflow, 300);
+      window.addEventListener('resize', handleResize);
+      
+      return () => window.removeEventListener('resize', handleResize);
+    }
+  }, []);
+
   return (
     <div className="relative w-full h-full">
       <div ref={mapContainer} className="w-full h-full" />
@@ -591,17 +623,30 @@ export default function MapBox({ accessToken }: MapBoxProps) {
       )}
 
       {/* Geolocation button */}
-      <div className="absolute bottom-10 right-4">
+      <div className={`absolute bottom-16 right-4 z-40 ${isMobileChrome ? 'will-change-transform hidden' : ''}`}>
         <button
           onClick={getUserLocation}
           disabled={locationLoading}
-          className={`w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 ${
+          className={`w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 relative ${
+            isMobileChrome ? 'transform-gpu will-change-transform' : ''
+          } ${
             locationLoading 
               ? 'text-gray-400 cursor-not-allowed' 
               : userLocation 
                 ? 'text-green-600 hover:text-green-800 hover:shadow-xl' 
                 : 'text-blue-600 hover:text-blue-800 hover:shadow-xl'
           }`}
+          style={{ 
+            WebkitTapHighlightColor: 'transparent',
+            touchAction: 'manipulation',
+            zIndex: 1000,
+            ...(isMobileChrome && {
+              WebkitTransform: 'translateZ(0)',
+              transform: 'translateZ(0)',
+              WebkitBackfaceVisibility: 'hidden',
+              backfaceVisibility: 'hidden'
+            })
+          }}
           title={locationLoading ? 'Obtenint ubicació...' : userLocation ? 'Tornar a centrar en la meva ubicació' : 'Centrar mapa en la meva ubicació'}
           aria-label={locationLoading ? 'Obtenint ubicació...' : userLocation ? 'Tornar a centrar en la meva ubicació' : 'Centrar mapa en la meva ubicació'}
         >
@@ -616,6 +661,48 @@ export default function MapBox({ accessToken }: MapBoxProps) {
           )}
         </button>
       </div>
+
+      {/* Fallback geolocation button for Chrome Android */}
+      {isMobileChrome && (
+        <div 
+          className="fixed z-50"
+          style={{
+            bottom: '80px',
+            right: '16px',
+            position: 'fixed',
+            pointerEvents: 'auto'
+          }}
+        >
+          <button
+            onClick={getUserLocation}
+            disabled={locationLoading}
+            className={`w-14 h-14 bg-white rounded-full shadow-2xl flex items-center justify-center border-2 border-gray-200 ${
+              locationLoading 
+                ? 'text-gray-400 cursor-not-allowed' 
+                : userLocation 
+                  ? 'text-green-600 border-green-300' 
+                  : 'text-blue-600 border-blue-300'
+            }`}
+            style={{ 
+              WebkitTapHighlightColor: 'transparent',
+              touchAction: 'manipulation',
+              zIndex: 2000,
+              WebkitTransform: 'translate3d(0,0,0)',
+              transform: 'translate3d(0,0,0)'
+            }}
+            title="Ubicació"
+            aria-label="Obtenir la meva ubicació"
+          >
+            {locationLoading ? (
+              <div className="w-6 h-6 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600"></div>
+            ) : (
+              <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0 0 13 3.06V1h-2v2.06A8.994 8.994 0 0 0 3.06 11H1v2h2.06A8.994 8.994 0 0 0 11 20.94V23h2v-2.06A8.994 8.994 0 0 0 20.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>
+              </svg>
+            )}
+          </button>
+        </div>
+      )}
 
       {/* Location error toast */}
       {locationError && (
