@@ -282,7 +282,7 @@ export default function MapBox({ accessToken }: MapBoxProps) {
       <div ref={mapContainer} className="w-full h-full" />
       
       {/* Info panel */}
-      <div className="absolute top-4 left-4 md:right-4">
+      <div className="absolute top-4 left-4 right-4">
         {/* Collapsed state - info icon (mobile only) */}
         <div className={`md:hidden absolute top-0 left-0 transition-all duration-300 ${infoPanelCollapsed ? 'scale-100 opacity-100' : 'scale-0 opacity-0 pointer-events-none'}`}>
           <button
