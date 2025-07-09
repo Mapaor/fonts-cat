@@ -282,43 +282,45 @@ export default function MapBox({ accessToken }: MapBoxProps) {
       <div ref={mapContainer} className="w-full h-full" />
       
       {/* Info panel */}
-      {infoPanelCollapsed ? (
-        // Collapsed state - info icon (mobile only)
-        <div className="absolute top-4 left-4 md:hidden">
+      <div className="absolute top-4 left-4 md:right-4">
+        {/* Collapsed state - info icon (mobile only) */}
+        <div className={`md:hidden absolute top-0 left-0 transition-all duration-300 ${infoPanelCollapsed ? 'scale-100 opacity-100' : 'scale-0 opacity-0 pointer-events-none'}`}>
           <button
             onClick={() => setInfoPanelCollapsed(false)}
-            className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-blue-600 hover:text-blue-800 transition-colors"
+            className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-blue-600 hover:text-blue-800 transition-all duration-300 hover:scale-110"
           >
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <svg className="w-6 h-6 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
             </svg>
           </button>
         </div>
-      ) : (
-        // Expanded state
-        <div className="absolute top-4 left-4 right-4 bg-white rounded-lg shadow-lg p-4 max-w-sm">
-          <h2 className="text-lg font-bold text-gray-800 mb-2">
+
+        {/* Expanded state */}
+        <div className={`bg-white rounded-lg shadow-lg p-4 max-w-sm transition-all duration-500 ease-in-out transform md:right-4 origin-top-left ${
+          infoPanelCollapsed ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'
+        }`}>
+          <h2 className="text-lg font-bold text-gray-800 mb-2 transition-opacity duration-300">
             Sobre la web
           </h2>
-          <p className="text-sm text-gray-600 mb-2">
+          <p className="text-sm text-gray-600 mb-2 transition-opacity duration-300 delay-75">
             És una web feta amb React i NextJS que utilitza MapBox per renderitzar el mapa a partir de les dades públiques d&apos;OpenStreetMap. 
           </p>
           <div className="flex justify-between items-end">
             <div className="flex-1">
               {loading ? (
-                <p className="text-xs text-blue-600">Carregant dades...</p>
+                <p className="text-xs text-blue-600 transition-opacity duration-300 delay-100">Carregant dades...</p>
               ) : (
-                <p className="text-xs text-green-600">
+                <p className="text-xs text-green-600 transition-opacity duration-300 delay-100">
                   {fountainCount.toLocaleString()} fonts carregades
                 </p>
               )}
-              <div className="mt-3 text-xs text-gray-500">
-                <p>💡 Fes clic als grups (cercles) per mostrar les fonts</p>
-                <p>🔍 O simplement fes zoom al teu municipi</p>
-                <p className="md:hidden">📱 Clica al mapa per amagar aquest panell</p>
-                <p>⛲ <button 
+              <div className="mt-3 text-xs text-gray-500 space-y-1">
+                <p className="transition-all duration-300 delay-150">💡 Fes clic als grups (cercles) per mostrar les fonts</p>
+                <p className="transition-all duration-300 delay-200">🔍 O simplement fes zoom al teu municipi</p>
+                <p className="md:hidden transition-all duration-300 delay-250">📱 Clica al mapa per amagar aquest panell</p>
+                <p className="transition-all duration-300 delay-300">⛲ <button 
                       onClick={() => setShowTutorialModal(true)}
-                      className="text-blue-600 hover:text-blue-800 underline cursor-pointer"
+                      className="text-blue-600 hover:text-blue-800 underline cursor-pointer transition-all duration-200 hover:scale-105 transform inline-block"
                     >
                       Clica aquí
                     </button> per aprendre a afegir una font</p>
@@ -326,7 +328,7 @@ export default function MapBox({ accessToken }: MapBoxProps) {
             </div>
             
             {/* GitHub icon positioned at the same height */}
-            <div className="ml-4">
+            <div className="ml-4 transition-all duration-300 delay-200">
               <a 
                 href="https://github.com/Mapaor/fonts-cat" 
                 target="_blank" 
@@ -345,7 +347,7 @@ export default function MapBox({ accessToken }: MapBoxProps) {
             </div>
           </div>
         </div>
-      )}
+      </div>
 
       {/* Tutorial Modal */}
       {showTutorialModal && (
