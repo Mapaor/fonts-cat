@@ -20,6 +20,64 @@ export default function MapBox({ accessToken }: MapBoxProps) {
   const [loading, setLoading] = useState(true);
   const [showTutorialModal, setShowTutorialModal] = useState(false);
   const [infoPanelCollapsed, setInfoPanelCollapsed] = useState(false);
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+  const [locationLoading, setLocationLoading] = useState(false);
+  const [locationError, setLocationError] = useState<string | null>(null);
+
+  // Function to get user's current location
+  const getUserLocation = () => {
+    if (!navigator.geolocation) {
+      setLocationError('La geolocalització no està suportada en aquest navegador');
+      return;
+    }
+
+    setLocationLoading(true);
+    setLocationError(null);
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        const location: [number, number] = [longitude, latitude];
+        setUserLocation(location);
+        setLocationLoading(false);
+        
+        // Center map on user's location
+        if (map.current) {
+          map.current.flyTo({
+            center: location,
+            zoom: 15, // Zoom closer to show more detail
+            duration: 2000 // Smooth animation
+          });
+        }
+      },
+      (error) => {
+        setLocationLoading(false);
+        let errorMessage = 'Error obtenint la ubicació';
+        
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            errorMessage = 'Permisos de ubicació denegats';
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorMessage = 'Ubicació no disponible';
+            break;
+          case error.TIMEOUT:
+            errorMessage = 'Temps d\'espera esgotat obtenint la ubicació';
+            break;
+        }
+        
+        setLocationError(errorMessage);
+        
+        // Clear error after 5 seconds
+        setTimeout(() => setLocationError(null), 5000);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 300000 // Cache location for 5 minutes
+      }
+    );
+  };
 
   useEffect(() => {
     if (map.current || !mapContainer.current) return;
@@ -76,6 +134,31 @@ export default function MapBox({ accessToken }: MapBoxProps) {
         
         // Add the icon to the map
         map.current!.addImage('water-drop', ctx.getImageData(0, 0, canvas.width, canvas.height));
+
+        // Create user location icon
+        const locationCanvas = document.createElement('canvas');
+        const locationCtx = locationCanvas.getContext('2d')!;
+        locationCanvas.width = 24;
+        locationCanvas.height = 24;
+        
+        // Draw location icon - blue circle with white center
+        locationCtx.fillStyle = '#3B82F6'; // Blue color
+        locationCtx.strokeStyle = '#ffffff';
+        locationCtx.lineWidth = 3;
+        
+        locationCtx.beginPath();
+        locationCtx.arc(12, 12, 10, 0, Math.PI * 2);
+        locationCtx.fill();
+        locationCtx.stroke();
+        
+        // White center
+        locationCtx.fillStyle = '#ffffff';
+        locationCtx.beginPath();
+        locationCtx.arc(12, 12, 5, 0, Math.PI * 2);
+        locationCtx.fill();
+        
+        // Add the location icon to the map
+        map.current!.addImage('user-location', locationCtx.getImageData(0, 0, locationCanvas.width, locationCanvas.height));
 
         // Fetch the GeoJSON data
         const response = await fetch('/fonts-cat.geojson');
@@ -277,6 +360,72 @@ export default function MapBox({ accessToken }: MapBoxProps) {
     };
   }, [accessToken, lng, lat, zoom]);
 
+  // Effect to handle user location marker
+  useEffect(() => {
+    if (!map.current || !userLocation) return;
+
+    const [lng, lat] = userLocation;
+
+    // Create source for user location if it doesn't exist
+    if (!map.current.getSource('user-location')) {
+      map.current.addSource('user-location', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: [{
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: [lng, lat]
+            },
+            properties: {}
+          }]
+        }
+      });
+
+      // Add layer for user location
+      map.current.addLayer({
+        id: 'user-location-layer',
+        type: 'symbol',
+        source: 'user-location',
+        layout: {
+          'icon-image': 'user-location',
+          'icon-size': 1,
+          'icon-allow-overlap': true,
+          'icon-ignore-placement': true
+        }
+      });
+
+      // Add pulsing circle around user location
+      map.current.addLayer({
+        id: 'user-location-pulse',
+        type: 'circle',
+        source: 'user-location',
+        paint: {
+          'circle-radius': 15,
+          'circle-color': '#3B82F6',
+          'circle-opacity': 0.3,
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#3B82F6',
+          'circle-stroke-opacity': 0.6
+        }
+      });
+    } else {
+      // Update existing source
+      (map.current.getSource('user-location') as mapboxgl.GeoJSONSource).setData({
+        type: 'FeatureCollection',
+        features: [{
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [lng, lat]
+          },
+          properties: {}
+        }]
+      });
+    }
+  }, [userLocation]);
+
   return (
     <div className="relative w-full h-full">
       <div ref={mapContainer} className="w-full h-full" />
@@ -436,6 +585,47 @@ export default function MapBox({ accessToken }: MapBoxProps) {
                   </p>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Geolocation button */}
+      <div className="absolute bottom-10 right-4">
+        <button
+          onClick={getUserLocation}
+          disabled={locationLoading}
+          className={`w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 ${
+            locationLoading 
+              ? 'text-gray-400 cursor-not-allowed' 
+              : userLocation 
+                ? 'text-green-600 hover:text-green-800 hover:shadow-xl' 
+                : 'text-blue-600 hover:text-blue-800 hover:shadow-xl'
+          }`}
+          title={locationLoading ? 'Obtenint ubicació...' : userLocation ? 'Tornar a centrar en la meva ubicació' : 'Centrar mapa en la meva ubicació'}
+          aria-label={locationLoading ? 'Obtenint ubicació...' : userLocation ? 'Tornar a centrar en la meva ubicació' : 'Centrar mapa en la meva ubicació'}
+        >
+          {locationLoading ? (
+            <div className="w-5 h-5">
+              <LoadingSpinner size="sm" color="gray" />
+            </div>
+          ) : (
+            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0 0 13 3.06V1h-2v2.06A8.994 8.994 0 0 0 3.06 11H1v2h2.06A8.994 8.994 0 0 0 11 20.94V23h2v-2.06A8.994 8.994 0 0 0 20.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>
+            </svg>
+          )}
+        </button>
+      </div>
+
+      {/* Location error toast */}
+      {locationError && (
+        <div className="absolute top-20 left-4 right-4 z-50">
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded shadow-lg max-w-sm mx-auto">
+            <div className="flex items-center">
+              <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+              <span className="text-sm">{locationError}</span>
             </div>
           </div>
         </div>
