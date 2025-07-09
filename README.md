@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚰 Fonts de Catalunya
 
-## Getting Started
+An interactive map displaying drinking water fountains (`amenity=drinking_water`) across Catalonia, sourced from OpenStreetMap data.
 
-First, run the development server:
+## Features
+
+- 🗺️ Interactive map using Mapbox GL JS
+- 📍 Clustered fountain markers for better performance
+- 🔍 Click to zoom on clusters
+- 💧 Detailed fountain information in popups
+- 📱 Responsive design with Tailwind CSS
+- 🎯 Focused on Catalonia region
+
+## Setup Instructions
+
+### 1. Install Dependencies
+
+```bash
+npm install
+```
+
+### 2. Get a Mapbox Access Token
+
+1. Go to [Mapbox Account](https://account.mapbox.com/access-tokens/)
+2. Create a new access token or use an existing one
+3. Copy the access token
+
+### 3. Configure Environment Variables
+
+1. Copy the example environment file:
+```bash
+copy .env.example .env.local
+```
+
+2. Edit `.env.local` and replace `your-mapbox-access-token-here` with your actual Mapbox access token:
+```
+NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=pk.eyJ1IjoieW91ci11c2VybmFtZSIsImEiOiJjbGthYmNkZWYifQ.your-actual-token
+```
+
+### 4. Run the Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Data Source
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The fountain data (`public/fonts-cat.geojson`) contains drinking water fountains from OpenStreetMap with the tag `amenity=drinking_water` across Catalonia. The data includes both point and polygon geometries, which are automatically converted to points for map visualization.
 
-## Learn More
+## Technology Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Next.js 15** - React framework with App Router
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
+- **Mapbox GL JS** - Interactive mapping
+- **GeoJSON** - Spatial data format
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Map Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Clustering**: Fountains are automatically clustered at lower zoom levels
+- **Interactive Popups**: Click on individual fountains to see details
+- **Responsive Design**: Works on desktop and mobile devices
+- **Real-time Counter**: Shows total number of fountains loaded
+- **Catalan Interface**: User interface in Catalan language
 
-## Deploy on Vercel
+## Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/
+├── app/
+│   ├── globals.css          # Global styles and Mapbox CSS
+│   ├── layout.tsx           # Root layout with metadata
+│   └── page.tsx             # Main page with MapBox component
+└── components/
+    └── MapBox.tsx           # Interactive map component
+public/
+└── fonts-cat.geojson       # GeoJSON data file (1MB+)
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Contributing
+
+Feel free to contribute by:
+- Improving the UI/UX
+- Adding more fountain details
+- Optimizing performance
+- Adding new features like route planning
+- Updating the fountain data
+
+## License
+
+This project uses data from OpenStreetMap, which is available under the Open Database License (ODbL).
