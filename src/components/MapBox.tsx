@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import LoadingSpinner from './LoadingSpinner';
+import Image from 'next/image';
 
 interface MapBoxProps {
   accessToken: string;
@@ -17,6 +18,7 @@ export default function MapBox({ accessToken }: MapBoxProps) {
   const [zoom] = useState(7); // Initial zoom level
   const [fountainCount, setFountainCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [showTutorialModal, setShowTutorialModal] = useState(false);
 
   useEffect(() => {
     if (map.current || !mapContainer.current) return;
@@ -213,6 +215,16 @@ export default function MapBox({ accessToken }: MapBoxProps) {
                 <h3 class="font-bold text-blue-600">${name}</h3>
                 <p class="text-sm text-gray-600">Font d&apos;aigua potable</p>
                 <p class="text-xs text-gray-500">ID: ${properties?.['@id'] || 'N/A'}</p>
+                <p class="text-xs text-gray-500">Coordenades: ${coordinates[1].toFixed(6)}, ${coordinates[0].toFixed(6)}</p>
+                <p class="text-xs mt-2">
+                  <a href="https://www.google.com/maps?q=${coordinates[1]},${coordinates[0]}" 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     class="text-blue-600 hover:text-blue-800 underline">
+                     Mostra a Google Maps
+                  </a>
+                </p>
+              </div>
             `)
             .addTo(map.current!);
         });
@@ -270,9 +282,14 @@ export default function MapBox({ accessToken }: MapBoxProps) {
               </p>
             )}
             <div className="mt-3 text-xs text-gray-500">
-              <p>💡 Fes clic als grups per mostrar-los</p>
-              <p>🔍 Fes zoom al teu municipi</p>
-              <p>⛲ Clica a baix a la dreta del mapa per afegir una font</p>
+              <p>💡 Fes clic als grups (cercles) per mostrar les fonts</p>
+              <p>🔍 O fes zoom al teu municipi</p>
+              <p>⛲ <button 
+                    onClick={() => setShowTutorialModal(true)}
+                    className="text-blue-600 hover:text-blue-800 underline cursor-pointer"
+                  >
+                    Clica aquí
+                  </button> per aprendre a afegir una font</p>
             </div>
           </div>
           
@@ -296,6 +313,98 @@ export default function MapBox({ accessToken }: MapBoxProps) {
           </div>
         </div>
       </div>
+
+      {/* Tutorial Modal */}
+      {showTutorialModal && (
+        <div className="fixed inset-0 bg-white bg-opacity-20 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-4xl max-h-[90vh] overflow-y-auto relative">
+            {/* Close button */}
+            <button
+              onClick={() => setShowTutorialModal(false)}
+              className="absolute top-4 right-4 text-red-600 hover:text-red-800 text-2xl font-bold z-10"
+            >
+              ✕
+            </button>
+            
+            {/* Modal content */}
+            <div className="p-6">
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">Com afegir una font a OpenStreetMap</h2>
+              
+              <div className="space-y-6">
+                <section>
+                  <h3 className="text-xl font-semibold text-blue-600 mb-4">1. Entrar en l&apos;editor</h3>
+                  <ol className="list-decimal list-inside space-y-3 text-gray-700">
+                    <li>Crea&apos;t un compte de OpenStreetMap a <a href="https://openstreetmap.org" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 transition-colors">openstreetmap.org</a></li>
+                    <li>Inicia la sessió i vés aproximadament a la ubicació on vols afegir la font</li>
+                    <li>
+                      Clica el botó de &apos;Edita&apos; a dalt a l&apos;esquerra
+                      <div className="mt-2 bg-gray-100 p-2 rounded">
+                        <Image 
+                          src="/edit-OSM.jpg" 
+                          alt="Botó d'editar a OpenStreetMap" 
+                          className="max-w-full h-auto rounded border"
+                          width={600}
+                          height={400}
+                        />
+                      </div>
+                      <p className="text-sm text-gray-600 mt-1">Ara et trobes en l&apos;editor iD (el per defecte) de OSM.</p>
+                    </li>
+                    <li>
+                      <strong>Opcional:</strong> si vols fes la visita guiada (&apos;Comença la introducció&apos;), 
+                      i presta especial interès en el capítol &apos;Punts&apos;.
+                    </li>
+                    <li>
+                      Clica l&apos;opció &apos;Editeu-lo ara&apos; per començar a editar el mapa. 
+                      (Si has decidit fer la visita guiada simplement clica al botó &quot;Comenceu a editar&quot; 
+                      seguit de &quot;D&apos;acord&quot;, &quot;D&apos;acord&quot; i &quot;D&apos;acord&quot;).
+                      <div className="mt-2 bg-gray-100 p-2 rounded">
+                        <Image 
+                          src="/edit-now.jpg" 
+                          alt="Botó d'editar ara" 
+                          className="max-w-full h-auto rounded border"
+                          width={600}
+                          height={400}
+                        />
+                      </div>
+                    </li>
+                  </ol>
+                  <p className="mt-4 text-gray-600 italic">
+                    Ara que ja estem dins l&apos;editor i sabem com funciona, ja podem afegir o modificar fonts.
+                  </p>
+                </section>
+
+                <section>
+                  <h3 className="text-xl font-semibold text-blue-600 mb-4">2. Afegir fonts d&apos;aigua potable</h3>
+                  
+                  <div className="mb-4 bg-gray-100 p-4 rounded">
+                    <Image 
+                      src="/iD-add-fountain.jpg" 
+                      alt="Afegir font amb l'editor iD" 
+                      className="max-w-full h-auto rounded border"
+                      width={600}
+                      height={400}
+                    />
+                  </div>
+                  
+                  <ol className="list-decimal list-inside space-y-3 text-gray-700">
+                    <li>Cliquem a dalt al centre &apos;Punt&apos; i marquem al mapa la posició exacta de la font</li>
+                    <li>Al buscador busquem &apos;Aigua apte per al consum&apos; (icona d&apos;una aixeta)</li>
+                    <li>Deixem tots els altres camps en blanc (sense tocar) i cliquem la creu (X) per tancar la pestanya d&apos;edició de l&apos;objecte.</li>
+                    <li>Un cop estem segurs que la font existeix i es troba en aquella posició li donem a dalt a la dreta a desa.</li>
+                  </ol>
+                </section>
+
+                <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400">
+                  <p className="text-blue-800">
+                    <strong>Nota important:</strong> Només afegeix fonts que existeixin realment i que hagis vist personalment. 
+                    OpenStreetMap es basa en dades verificades i precises.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Loading overlay */}
       {loading && (

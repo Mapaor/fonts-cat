@@ -97,7 +97,7 @@ Feel free to contribute by:
 - Improving the UI/UX
 - Adding more fountain details
 - Optimizing performance
-- Adding new features like route planning
+- Adding new features
 - Updating the fountain data
 
 ## License
