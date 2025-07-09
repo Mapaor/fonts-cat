@@ -27,10 +27,7 @@ npm install
 
 ### 3. Configure Environment Variables
 
-1. Copy the example environment file:
-```bash
-copy .env.example .env.local
-```
+1. Create a ``.env.local` file:
 
 2. Edit `.env.local` and replace `your-mapbox-access-token-here` with your actual Mapbox access token:
 ```
@@ -44,6 +41,21 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to view the application.
+
+## Deployment to Vercel
+
+### 1. Commit to GitHub
+Use Git or GitHub Desktop to publish the repository to GitHub.
+
+### 2. Configure Vercel 
+1. Go to your GitHub settings > Apps > Vercel and give it acces to your repository (`fonts-cat`). 
+2. Ope the the Vercel dashboard (it should open automatically) and add a new project, select the repository and the 'Import' button.
+3. Add environment variable from `.env.local`
+4. Deploy
+5. See your website at a link like `https://fonts-cat.vercel.app`
+   
+## All set up
+Everytime you push a new commit the web app will redeploy
 
 ## Data Source
 
@@ -90,4 +102,4 @@ Feel free to contribute by:
 
 ## License
 
-This project uses data from OpenStreetMap, which is available under the Open Database License (ODbL).
+This project uses data from OpenStreetMap, which is available under the Open Database License (ODbL). The code itself is unlicensed.

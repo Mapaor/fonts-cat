@@ -5,13 +5,13 @@ export default function HomePage() {
   // You'll need to get a Mapbox access token from https://account.mapbox.com/access-tokens/
   const MAPBOX_ACCESS_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || 'your-mapbox-token-here';
 
-  if (MAPBOX_ACCESS_TOKEN === 'your-mapbox-token-here') {
+  if (!MAPBOX_ACCESS_TOKEN || MAPBOX_ACCESS_TOKEN.length < 60 || MAPBOX_ACCESS_TOKEN.length > 200) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="max-w-lg w-full bg-white rounded-lg shadow-lg p-6 text-center">
           <div className="text-yellow-500 text-6xl mb-4">🔑</div>
           <h2 className="text-xl font-bold text-gray-800 mb-2">
-            Token de Mapbox necessari
+            Token de Mapbox no present o incorrecte
           </h2>
           <p className="text-gray-600 mb-4">
             Per utilitzar aquesta aplicació, necessites configurar un token d&apos;accés de Mapbox.
@@ -26,7 +26,7 @@ export default function HomePage() {
             </ol>
           </div>
           <p className="text-xs text-gray-500">
-            Consulta el README.md per a instruccions detallades.
+            Consulta el README.md per a instruccions més detallades.
           </p>
         </div>
       </div>
@@ -38,8 +38,8 @@ export default function HomePage() {
       <div className="min-h-screen">
         <header className="bg-blue-600 text-white p-4 shadow-lg">
           <div className="container mx-auto">
-            <h1 className="text-2xl font-bold">🚰 Fonts de Catalunya</h1>
-            <p className="text-blue-100">Mapa interactiu de les fonts d&apos;aigua potable</p>
+            <h1 className="text-2xl font-bold">Fonts de Catalunya</h1>
+            <p className="text-blue-100">Un mapa interactiu ben senzill per si un dia busques una font d&apos;aigua potable</p>
           </div>
         </header>
         
