@@ -623,7 +623,7 @@ export default function MapBox({ accessToken }: MapBoxProps) {
       )}
 
       {/* Geolocation button */}
-      <div className={`absolute bottom-16 right-4 z-40 ${isMobileChrome ? 'will-change-transform hidden' : ''}`}>
+      <div className={`absolute bottom-10 right-4 z-40 ${isMobileChrome ? 'will-change-transform hidden' : ''}`}>
         <button
           onClick={getUserLocation}
           disabled={locationLoading}
@@ -667,7 +667,7 @@ export default function MapBox({ accessToken }: MapBoxProps) {
         <div 
           className="fixed z-50"
           style={{
-            bottom: '80px',
+            bottom: '24px',
             right: '16px',
             position: 'fixed',
             pointerEvents: 'auto'
