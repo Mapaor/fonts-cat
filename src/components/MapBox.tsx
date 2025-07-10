@@ -463,9 +463,9 @@ export default function MapBox({ accessToken }: MapBoxProps) {
       <div ref={mapContainer} className="w-full h-full" />
       
       {/* Info panel */}
-      <div className="absolute top-4 left-4 right-4">
+      <div className="absolute top-4 left-0 w-fit">
         {/* Collapsed state - info icon (mobile only) */}
-        <div className={`md:hidden absolute top-0 left-0 transition-all duration-300 ${infoPanelCollapsed ? 'scale-100 opacity-100' : 'scale-0 opacity-0 pointer-events-none'}`}>
+        <div className={`md:hidden absolute top-0 left-4 transition-all duration-300 ${infoPanelCollapsed ? 'scale-100 opacity-100' : 'scale-0 opacity-0 pointer-events-none'}`}>
           <button
             onClick={() => setInfoPanelCollapsed(false)}
             className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-blue-600 hover:text-blue-800 transition-all duration-300 hover:scale-110"
@@ -477,7 +477,7 @@ export default function MapBox({ accessToken }: MapBoxProps) {
         </div>
 
         {/* Expanded state */}
-        <div className={`bg-white rounded-lg shadow-lg p-4 max-w-sm transition-all duration-500 ease-in-out transform md:right-4 origin-top-left ${
+        <div className={`bg-white rounded-lg shadow-lg p-4 max-w-sm ml-4 mr-4 md:mr-0 transition-all duration-500 ease-in-out transform origin-top-left ${
           infoPanelCollapsed ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'
         }`}>
           <h2 className="text-lg font-bold text-gray-800 mb-2 transition-opacity duration-300">
