@@ -508,10 +508,10 @@ export default function MapBox({ accessToken }: MapBoxProps) {
                 </p>
               )}
               <div className="mt-3 text-xs text-gray-500 space-y-1">
-                <p className="transition-all duration-300 delay-150">💡 Fes clic als grups (cercles) per mostrar les fonts</p>
-                <p className="transition-all duration-300 delay-200">🔍 O simplement fes zoom al teu municipi</p>
+                <p className="transition-all duration-300 delay-150">💡 Fes clic als grups (cercles) per mostrar les seves fonts</p>
+                <p className="transition-all duration-300 delay-200">🔍 O simplement fes zoom fins al teu municipi</p>
                 <p className="md:hidden transition-all duration-300 delay-250">📱 Interactua amb el mapa per amagar aquest panell</p>
-                <p className="transition-all duration-300 delay-300">⛲ <button 
+                <p className="transition-all duration-300 delay-300">✏️ <button 
                       onClick={() => setShowTutorialModal(true)}
                       className="text-blue-600 hover:text-blue-800 underline cursor-pointer transition-all duration-200 hover:scale-105 transform inline-block"
                     >
@@ -645,8 +645,8 @@ export default function MapBox({ accessToken }: MapBoxProps) {
             locationLoading 
               ? 'text-gray-400 cursor-not-allowed' 
               : userLocation 
-                ? 'text-green-600 hover:text-green-800 hover:shadow-xl' 
-                : 'text-blue-600 hover:text-blue-800 hover:shadow-xl'
+                ? 'text-green-600 hover:text-green-800 hover:shadow-xl cursor-pointer' 
+                : 'text-blue-600 hover:text-blue-800 hover:shadow-xl cursor-pointer'
           }`}
           style={{ 
             WebkitTapHighlightColor: 'transparent',
@@ -659,11 +659,11 @@ export default function MapBox({ accessToken }: MapBoxProps) {
               backfaceVisibility: 'hidden'
             })
           }}
-          title={locationLoading ? 'Obtenint ubicació...' : userLocation ? 'Tornar a centrar en la meva ubicació' : 'Centrar mapa en la meva ubicació'}
-          aria-label={locationLoading ? 'Obtenint ubicació...' : userLocation ? 'Tornar a centrar en la meva ubicació' : 'Centrar mapa en la meva ubicació'}
+          title={locationLoading ? 'Obtenint ubicació...' : userLocation ? 'Tornar a centrar en la meva ubicació' : 'Vés a la meva ubicació'}
+          aria-label={locationLoading ? 'Obtenint ubicació...' : userLocation ? 'Tornar a centrar en la meva ubicació' : 'Vés a la meva ubicació'}
         >
           {locationLoading ? (
-            <div className="w-5 h-5">
+            <div className="w-5 h-5 flex items-center justify-center">
               <LoadingSpinner size="sm" color="gray" />
             </div>
           ) : (
@@ -692,8 +692,8 @@ export default function MapBox({ accessToken }: MapBoxProps) {
               locationLoading 
                 ? 'text-gray-400 cursor-not-allowed' 
                 : userLocation 
-                  ? 'text-green-600 border-green-300' 
-                  : 'text-blue-600 border-blue-300'
+                  ? 'text-green-600 border-green-300 cursor-pointer' 
+                  : 'text-blue-600 border-blue-300 cursor-pointer'
             }`}
             style={{ 
               WebkitTapHighlightColor: 'transparent',
