@@ -331,21 +331,33 @@ export default function MapBox({ accessToken }: MapBoxProps) {
           map.current!.getCanvas().style.cursor = '';
         });
 
-        // Add click event to collapse info panel on mobile when clicking the map
-        map.current!.on('click', (e) => {
-          // Check if we're on mobile (screen width < 768px)
+        // Add events to collapse info panel on mobile when interacting with the map
+        const collapseOnMobileIfNotOnFeature = (e: mapboxgl.MapMouseEvent | mapboxgl.MapTouchEvent) => {
           if (window.innerWidth < 768) {
-            // Check if the click is not on a cluster or unclustered point
+            // Check if the interaction is not on a cluster or unclustered point
             const features = map.current!.queryRenderedFeatures(e.point, {
               layers: ['clusters', 'unclustered-point']
             });
             
-            // If no features were clicked (clicking on empty map), collapse the panel
+            // If no features were interacted with, collapse the panel
             if (features.length === 0) {
               setInfoPanelCollapsed(true);
             }
           }
-        });
+        };
+
+        // For events that don't have a point (like dragstart), always collapse on mobile
+        const collapseOnMobile = () => {
+          if (window.innerWidth < 768) {
+            setInfoPanelCollapsed(true);
+          }
+        };
+
+        map.current!.on('dragstart', collapseOnMobile);
+        map.current!.on('zoomstart', collapseOnMobile);
+        map.current!.on('rotatestart', collapseOnMobile);
+        map.current!.on('touchstart', collapseOnMobileIfNotOnFeature);
+        map.current!.on('click', collapseOnMobileIfNotOnFeature);
 
         setLoading(false);
       } catch (error) {
@@ -463,9 +475,9 @@ export default function MapBox({ accessToken }: MapBoxProps) {
       <div ref={mapContainer} className="w-full h-full" />
       
       {/* Info panel */}
-      <div className="absolute top-4 left-0 w-fit">
+      <div className="absolute top-4 left-0 w-fit pointer-events-none">
         {/* Collapsed state - info icon (mobile only) */}
-        <div className={`md:hidden absolute top-0 left-4 transition-all duration-300 ${infoPanelCollapsed ? 'scale-100 opacity-100' : 'scale-0 opacity-0 pointer-events-none'}`}>
+        <div className={`md:hidden absolute top-0 left-4 transition-all duration-300 pointer-events-auto ${infoPanelCollapsed ? 'scale-100 opacity-100' : 'scale-0 opacity-0 pointer-events-none'}`}>
           <button
             onClick={() => setInfoPanelCollapsed(false)}
             className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-blue-600 hover:text-blue-800 transition-all duration-300 hover:scale-110"
@@ -477,7 +489,7 @@ export default function MapBox({ accessToken }: MapBoxProps) {
         </div>
 
         {/* Expanded state */}
-        <div className={`bg-white rounded-lg shadow-lg p-4 max-w-sm ml-4 mr-4 md:mr-0 transition-all duration-500 ease-in-out transform origin-top-left ${
+        <div className={`bg-white rounded-lg shadow-lg p-4 max-w-sm ml-4 mr-4 md:mr-0 pointer-events-auto transition-all duration-500 ease-in-out transform origin-top-left ${
           infoPanelCollapsed ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'
         }`}>
           <h2 className="text-lg font-bold text-gray-800 mb-2 transition-opacity duration-300">
@@ -498,7 +510,7 @@ export default function MapBox({ accessToken }: MapBoxProps) {
               <div className="mt-3 text-xs text-gray-500 space-y-1">
                 <p className="transition-all duration-300 delay-150">💡 Fes clic als grups (cercles) per mostrar les fonts</p>
                 <p className="transition-all duration-300 delay-200">🔍 O simplement fes zoom al teu municipi</p>
-                <p className="md:hidden transition-all duration-300 delay-250">📱 Clica al mapa per amagar aquest panell</p>
+                <p className="md:hidden transition-all duration-300 delay-250">📱 Interactua amb el mapa per amagar aquest panell</p>
                 <p className="transition-all duration-300 delay-300">⛲ <button 
                       onClick={() => setShowTutorialModal(true)}
                       className="text-blue-600 hover:text-blue-800 underline cursor-pointer transition-all duration-200 hover:scale-105 transform inline-block"
