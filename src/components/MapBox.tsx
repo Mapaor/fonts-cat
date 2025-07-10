@@ -104,37 +104,30 @@ export default function MapBox({ accessToken }: MapBoxProps) {
 
     map.current.on('load', async () => {
       try {
-        // Create water drop icon
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d')!;
-        canvas.width = 32;
-        canvas.height = 40;
-        
-        // Draw water drop shape - classic teardrop
-        ctx.fillStyle = '#1E40AF'; // Blue color
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 2;
-        
-        ctx.beginPath();
-        // Start from the top point
-        ctx.moveTo(16, 4);
-        // Left curve down to bottom
-        ctx.bezierCurveTo(6, 14, 6, 24, 16, 32);
-        // Right curve back up to top
-        ctx.bezierCurveTo(26, 24, 26, 14, 16, 4);
-        ctx.closePath();
-        
-        ctx.fill();
-        ctx.stroke();
-        
-        // Add small highlight for glossy effect
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-        ctx.beginPath();
-        ctx.ellipse(13, 12, 3, 5, -0.3, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Add the icon to the map
-        map.current!.addImage('water-drop', ctx.getImageData(0, 0, canvas.width, canvas.height));
+        // Load water drop icon from SVG
+        await new Promise<void>((resolve, reject) => {
+          const img = document.createElement('img') as HTMLImageElement;
+          img.onload = () => {
+            try {
+              // Create canvas to render the SVG
+              const canvas = document.createElement('canvas');
+              const ctx = canvas.getContext('2d')!;
+              canvas.width = 32;
+              canvas.height = 32;
+              
+              // Draw the SVG image onto the canvas
+              ctx.drawImage(img, 0, 0, 32, 32);
+              
+              // Add the icon to the map
+              map.current!.addImage('water-drop', ctx.getImageData(0, 0, canvas.width, canvas.height));
+              resolve();
+            } catch (error) {
+              reject(error);
+            }
+          };
+          img.onerror = () => reject(new Error('Failed to load SVG icon'));
+          img.src = '/potable-water.svg';
+        });
 
         // Create user location icon
         const locationCanvas = document.createElement('canvas');
