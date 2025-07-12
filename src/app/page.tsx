@@ -39,8 +39,10 @@ export default function HomePage() {
         <header className="bg-blue-600 text-white p-4 shadow-lg">
           <div className="container mx-auto">
             <h1 className="text-2xl font-bold flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-200">
-                <path d="M21.75 16.25L17 21l-2.75-3l1.16-1.16L17 18.43l3.59-3.59zM17.62 12C16.31 8.1 12 3.25 12 3.25S6 10 6 14c0 3.31 2.69 6 6 6h.34c-.22-.64-.34-1.3-.34-2c0-3.18 2.5-5.78 5.62-6"/>
+              {/* Logo SVG més petit i amb color-blue-200 (#bedbff) */}
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="#bedbff" stroke="#bedbff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21.75 16.25L17 21l-2.75-3l1.16-1.16L17 18.43l3.59-3.59z" />
+                <path d="M17.62 12C16.31 8.1 12 3.25 12 3.25S6 10 6 14c0 3.31 2.69 6 6 6h.34c-.22-.64-.34-1.3-.34-2c0-3.18 2.5-5.78 5.62-6L17.62 12z" />
               </svg>
               Fonts de Catalunya
             </h1>
