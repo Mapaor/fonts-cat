@@ -1,105 +1,49 @@
-# 🚰 Fonts de Catalunya
+# fonts-cat
 
-An interactive map displaying drinking water fountains (`amenity=drinking_water`) across Catalonia, sourced from OpenStreetMap data.
+## Resum
 
-## Features
+Molt ràpidament, aquest repositori es basa en dades públiques d'OpenStreetMap, concretament dels nodes de la regió de Catalunnya que tenen l'etiqueta `amenity=drinking_water`. Per mostrar el mapa i personalitzar-lo s'utilitza Mapbox.
 
-- 🗺️ Interactive map using Mapbox GL JS
-- 📍 Clustered fountain markers for better performance
-- 🔍 Click to zoom on clusters
-- 💧 Detailed fountain information in popups
-- 📱 Responsive design with Tailwind CSS
-- 🎯 Focused on Catalonia region
+## Configuració
+0. Baixar o clonar el projecte en local (recomanació: utilitzar GitHub Desktop)
+1. Instal·lar dependències (`npm install`)
+2. Registrar-se a Mapbox i obtenir un access token: [https://account.mapbox.com/access-tokens/](https://account.mapbox.com/access-tokens/)
+3. Posar l'access token a un fitxer (crear-lo) `.env.local`:
+   ```
+   NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=pk.eyJ1IjoieW91ci11c2VybmFtZSIsImEiOiJjbGthYmNkZWYifQ.el-teu-token
+   ```
+4. Executar l'app en local en mode desenvolupament (`npm run dev` i [http://localhost:3000](http://localhost:3000))
+5. Fer les personalitzacions necessaries
+6. Executar l'app en local ara en mode producció (`npm run build` i `npm start` i [http://localhost:3000](http://localhost:3000)), si no es dona cap error, tot està ben configurat per publicar la web.
+7. Publicar el repositori a GitHub utilitzant GitHub Desktop o Git
+8. Importar-lo a Vercel
+   1. GitHub settings > Apps > Vercel i donar accés al repositori (`fonts-cat`). 
+   2. Obrir el Vercel dashboard (s'hauria d'obrir automoàticament) i crear un nou projecte, importar el repositori `fonts-cat`.
+9. Afegir la variable de `.env.local` (si no es fa inicialment abans de fer el primer Deploy, es pot fer després a Project > Settings > Environment Variables)
+4. Fer 'Deploy' del projecte
+5. Veure la web publicada a una url similar a la següent `https://fonts-cat.vercel.app` (te la mostra el dashboard del projecte de Vercel)
 
-## Setup Instructions
+## Dades
+Les dades de les fonts són el fitxer GeoJson que hi ha dins la carpeta public (`public/fonts-cat.geojson`). En un cas ideal tindríem un servidor que obté via OpenStreetMap Overpass API les dades i les va actualitzant aproximadament 1 cop la setmana. En el nostre cas, com que és una aplicació client-side i les dades pesen poc (~2.5MB) les deixem dins la carpeta public de manera estàtica.
 
-### 1. Install Dependencies
+Per obtenir les dades el següent script d'exemple pot servir:
 
-```bash
-npm install
-```
+## Característiques tècniques
+NextJS 15 amb App Router, Typescript i Tailwind CSS.
 
-### 2. Get a Mapbox Access Token
-
-1. Go to [Mapbox Account](https://account.mapbox.com/access-tokens/)
-2. Create a new access token or use an existing one
-3. Copy the access token
-
-### 3. Configure Environment Variables
-
-1. Create a ``.env.local` file:
-
-2. Edit `.env.local` and replace `your-mapbox-access-token-here` with your actual Mapbox access token:
-```
-NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=pk.eyJ1IjoieW91ci11c2VybmFtZSIsImEiOiJjbGthYmNkZWYifQ.your-actual-token
-```
-
-### 4. Run the Development Server
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) to view the application.
-
-## Deployment to Vercel
-
-### 1. Commit to GitHub
-Use Git or GitHub Desktop to publish the repository to GitHub.
-
-### 2. Configure Vercel 
-1. Go to your GitHub settings > Apps > Vercel and give it acces to your repository (`fonts-cat`). 
-2. Ope the the Vercel dashboard (it should open automatically) and add a new project, select the repository and the 'Import' button.
-3. Add environment variable from `.env.local`
-4. Deploy
-5. See your website at a link like `https://fonts-cat.vercel.app`
-   
-## All set up
-Everytime you push a new commit the web app will redeploy
-
-## Data Source
-
-The fountain data (`public/fonts-cat.geojson`) contains drinking water fountains from OpenStreetMap with the tag `amenity=drinking_water` across Catalonia. The data includes both point and polygon geometries, which are automatically converted to points for map visualization.
-
-## Technology Stack
-
-- **Next.js 15** - React framework with App Router
-- **TypeScript** - Type safety
-- **Tailwind CSS** - Styling
-- **Mapbox GL JS** - Interactive mapping
-- **GeoJSON** - Spatial data format
-
-## Map Features
-
-- **Clustering**: Fountains are automatically clustered at lower zoom levels
-- **Interactive Popups**: Click on individual fountains to see details
-- **Responsive Design**: Works on desktop and mobile devices
-- **Real-time Counter**: Shows total number of fountains loaded
-- **Catalan Interface**: User interface in Catalan language
-
-## Project Structure
-
+## Estructura repositori
 ```
 src/
 ├── app/
-│   ├── globals.css          # Global styles and Mapbox CSS
-│   ├── layout.tsx           # Root layout with metadata
-│   └── page.tsx             # Main page with MapBox component
+│   ├── globals.css
+│   ├── layout.tsx 
+│   └── page.tsx
 └── components/
-    └── MapBox.tsx           # Interactive map component
+    └── MapBox.tsx          # Component mapa interactiu
 public/
-└── fonts-cat.geojson       # GeoJSON data file (1MB+)
+└── fonts-cat.geojson       # Fitxer GeoJSON (~2.5MB)
 ```
 
-## Contributing
+## Llicència
 
-Feel free to contribute by:
-- Improving the UI/UX
-- Adding more fountain details
-- Optimizing performance
-- Adding new features
-- Updating the fountain data
-
-## License
-
-This project uses data from OpenStreetMap, which is available under the Open Database License (ODbL). This repository and it's code is completely unlicensed ('The Unlicense' LICENSE), that means you are free to do anything you want with it with no restrictions of any kind.
+El projecte utilitza dades d'OpenStreetMap, que són públiques sota la Open Database License (ODbL). Aquest repositori i el seu codi són completament lliures ('The Unlicense' LICENSE), això vol dir que el pots utilitzar pel que vulguis sense restriccions de cap tipus.
