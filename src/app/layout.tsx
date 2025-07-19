@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Fonts de Catalunya - Mapa interactiu",
+  title: "Fonts de Catalunya",
   description: "Mapa interactiu de les fonts d'aigua potable de Catalunya. Dades obtingudes d'OpenStreetMap",
   keywords: ["fonts", "Catalunya", "aigua", "potable", "mapa", "OpenStreetMap"],
   authors: [{ name: "Fonts Catalunya" }],
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     icon: "/logo.svg",
   },
   openGraph: {
-    title: "Fonts de Catalunya - Mapa interactiu",
+    title: "Fonts de Catalunya",
     description: "Mapa interactiu de les fonts d'aigua potable de Catalunya. Dades obtingudes d'OpenStreetMap",
     url: "https://fonts-cat.vercel.app",
     images: [
