@@ -21,30 +21,29 @@ Molt ràpidament, aquest repositori es basa en dades públiques d'OpenStreetMap,
    2. Obrir el Vercel dashboard (s'hauria d'obrir automoàticament) i crear un nou projecte, importar el repositori `fonts-cat`.
 9. Afegir la variable de `.env.local` (si no es fa inicialment abans de fer el primer Deploy, es pot fer després a Project > Settings > Environment Variables)
 4. Fer 'Deploy' del projecte
-5. Veure la web publicada a una url similar a la següent `https://fonts-cat.vercel.app` (però segurament amb el nom del vostre projecte de Vercel)
-   
+5. Veure la web publicada a una url similar a la següent `https://fonts-cat.vercel.app` (te la mostra el dashboard del projecte de Vercel)
+
 ## Dades
-Les dades de les fonts són el fitxer GeoJson que hi ha dins la carpeta public (`public/fonts-cat.geojson`). En un cas ideal tindríem un servidor que obté via OpenStreetMap Overpass API les dades i les va actualitzant aproximadament 1 cop la setmana. En el nostre cas, com que és una aplicació client-side i les dades pesen poc (~2MB) les deixem dins la carpeta public de manera estàtica.
+Les dades de les fonts són el fitxer GeoJson que hi ha dins la carpeta public (`public/fonts-cat.geojson`). En un cas ideal tindríem un servidor que obté via OpenStreetMap Overpass API les dades i les va actualitzant aproximadament 1 cop la setmana. En el nostre cas, com que és una aplicació client-side i les dades pesen poc (~2.5MB) les deixem dins la carpeta public de manera estàtica.
 
 Per obtenir les dades el següent script d'exemple pot servir:
 
 ## Característiques tècniques de la app web
-NextJS 15 amb App Router, Typescript i Tailwind CSS
+NextJS 15 amb App Router, Typescript i Tailwind CSS.
 
-## Estructura
-
+## Estructura repositori
 ```
 src/
 ├── app/
-│   ├── globals.css          # Global styles and Mapbox CSS
-│   ├── layout.tsx           # Root layout with metadata
-│   └── page.tsx             # Main page with MapBox component
+│   ├── globals.css
+│   ├── layout.tsx 
+│   └── page.tsx
 └── components/
-    └── MapBox.tsx           # Interactive map component
+    └── MapBox.tsx           # Component mapa interactiu
 public/
-└── fonts-cat.geojson       # GeoJSON data file (1MB+)
+└── fonts-cat.geojson       # Fitxer GeoJSON (~2.5MB)
 ```
 
-## License
+## Llicència
 
-This project uses data from OpenStreetMap, which is available under the Open Database License (ODbL). This repository and it's code is completely unlicensed ('The Unlicense' LICENSE), that means you are free to do anything you want with it with no restrictions of any kind.
+El projecte utilitza dades d'OpenStreetMap, que són públiques sota la Open Database License (ODbL). Aquest repositori i el seu codi són completament lliures ('The Unlicense' LICENSE), això vol dir que el pots utilitzar pel que vulguis sense restriccions de cap tipus.
