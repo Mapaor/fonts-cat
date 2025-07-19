@@ -28,7 +28,7 @@ Les dades de les fonts són el fitxer GeoJson que hi ha dins la carpeta public (
 
 Per obtenir les dades el següent script d'exemple pot servir:
 
-## Característiques tècniques de la app web
+## Característiques tècniques
 NextJS 15 amb App Router, Typescript i Tailwind CSS.
 
 ## Estructura repositori
