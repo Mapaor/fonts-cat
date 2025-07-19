@@ -39,7 +39,7 @@ out body;
 >;
 out skel qt;
 ```
-A continuació clicar "Executa" i en uns 10 segons s'haurien de carregar les fonts al mapa, després cliques "Exporta" i tries el format "GeoJSON".
+A continuació clicar "Executa" i en uns pocs segons s'haurien de carregar les fonts al mapa, després clicar "Exporta" i triar el format "GeoJSON".
 
 ## Característiques tècniques
 NextJS 15, App Router, Typescript, Tailwind CSS, `mapbox-gl`. 
