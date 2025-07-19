@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     url: "https://fonts-cat.vercel.app",
     images: [
       {
-        url: "https://fonts-cat.vercel.app/fonts-bcn.jpg",
+        url: "https://fonts-cat.vercel.app/banner-mapa.png",
         width: 1200,
         height: 630,
         alt: "Fonts Catalunya Banner",
