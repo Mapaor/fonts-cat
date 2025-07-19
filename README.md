@@ -39,7 +39,7 @@ src/
 │   ├── layout.tsx 
 │   └── page.tsx
 └── components/
-    └── MapBox.tsx           # Component mapa interactiu
+    └── MapBox.tsx          # Component mapa interactiu
 public/
 └── fonts-cat.geojson       # Fitxer GeoJSON (~2.5MB)
 ```
