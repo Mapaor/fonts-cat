@@ -26,7 +26,20 @@ Molt ràpidament, aquest repositori es basa en dades públiques d'OpenStreetMap,
 ## Dades
 Les dades de les fonts són el fitxer GeoJson que hi ha dins la carpeta public (`public/fonts-cat.geojson`). En un cas ideal tindríem un servidor que obté via OpenStreetMap Overpass API les dades i les va actualitzant aproximadament 1 cop la setmana. En el nostre cas, com que és una aplicació client-side i les dades pesen poc (~2.5MB) les deixem dins la carpeta public de manera estàtica.
 
-Per obtenir les dades el següent script d'exemple pot servir:
+Per obtenir les dades sense utilitzar cap API es pot fer senzillament entrant a [] i utilitzant el següent script d'exemple:
+```
+[out:json][timeout:60];
+{{geocodeArea:"Catalonia"}}->.searchArea;
+(
+  node["amenity"="drinking_water"](area.searchArea);
+  way["amenity"="drinking_water"](area.searchArea);
+  relation["amenity"="drinking_water"](area.searchArea);
+);
+out body;
+>;
+out skel qt;
+```
+A continuació clicar "Executa" i en uns 10 segons s'haurien de carregar les fonts al mapa, després cliques "Exporta" i tries el format "GeoJSON".
 
 ## Característiques tècniques
 NextJS 15, App Router, Typescript, Tailwind CSS, `mapbox-gl`. 
