@@ -42,6 +42,7 @@ src/
     └── MapBox.tsx          # Component mapa interactiu
 public/
 └── fonts-cat.geojson       # Fitxer GeoJSON (~2.5MB)
+.env.local                  # Variable access token de Mapbox perquè funcioni en local
 ```
 
 ## Llicència
