@@ -29,7 +29,7 @@ Les dades de les fonts són el fitxer GeoJson que hi ha dins la carpeta public (
 Per obtenir les dades el següent script d'exemple pot servir:
 
 ## Característiques tècniques
-NextJS 15 amb App Router, Typescript i Tailwind CSS.
+NextJS 15, App Router, Typescript, Tailwind CSS, `mapbox-gl`. 
 
 ## Estructura repositori
 ```
@@ -42,7 +42,7 @@ src/
     └── MapBox.tsx          # Component mapa interactiu
 public/
 └── fonts-cat.geojson       # Fitxer GeoJSON (~2.5MB)
-.env.local                  # Variable access token de Mapbox perquè funcioni en local
+.env.local                  # Access token de Mapbox per tal que funcioni en local
 ```
 
 ## Llicència
