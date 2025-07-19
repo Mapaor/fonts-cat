@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Fonts de Catalunya",
-  description: "Mapa interactiu de les fonts d'aigua potable de Catalunya. Dades obtingudes d'OpenStreetMap",
+  description: "Mapa interactiu de les fonts d'aigua potable de Catalunya.",
   keywords: ["fonts", "Catalunya", "aigua", "potable", "mapa", "OpenStreetMap"],
   authors: [{ name: "Fonts Catalunya" }],
   icons: {
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Fonts de Catalunya",
-    description: "Mapa interactiu de les fonts d'aigua potable de Catalunya. Dades obtingudes d'OpenStreetMap",
+    description: "Mapa interactiu de les fonts d'aigua potable de Catalunya.",
     url: "https://fonts-cat.vercel.app",
     images: [
       {
