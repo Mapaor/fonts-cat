@@ -6,6 +6,29 @@ export const metadata: Metadata = {
   description: "Mapa interactiu de les fonts d'aigua potable de Catalunya. Dades obtingudes d'OpenStreetMap",
   keywords: ["fonts", "Catalunya", "aigua", "potable", "mapa", "OpenStreetMap"],
   authors: [{ name: "Fonts Catalunya" }],
+  icons: {
+    icon: "/logo.svg",
+  },
+  openGraph: {
+    title: "Fonts de Catalunya - Mapa interactiu",
+    description: "Mapa interactiu de les fonts d'aigua potable de Catalunya. Dades obtingudes d'OpenStreetMap",
+    url: "https://fonts-cat.vercel.app",
+    images: [
+      {
+        url: "https://fonts-cat.vercel.app/fonts-bcn.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Fonts Catalunya Banner",
+      },
+    ],
+    siteName: "Fonts Catalunya",
+    type: "website",
+    locale: "ca_ES",
+  },
+  metadataBase: new URL("https://fonts-cat.vercel.app"),
+  alternates: {
+    canonical: "https://fonts-cat.vercel.app",
+  },
 };
 
 export const viewport: Viewport = {
